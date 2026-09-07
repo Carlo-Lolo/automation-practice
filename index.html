@@ -4,39 +4,70 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>班次查询</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📆</text></svg>">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📆</text></svg>">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Microsoft YaHei';background:#e8f4f8;padding:15px}
-.container{background:#fff;border-radius:16px;padding:20px;max-width:500px;margin:0 auto}
-h1{text-align:center;font-size:22px;color:#2c3e50;margin-bottom:15px}
-.setup-box{background:#f0f7fa;border-radius:12px;padding:15px;margin-bottom:15px}
-.setup-box label{font-weight:bold;font-size:14px;display:block;margin-bottom:8px}
+body{font-family:'Microsoft YaHei','PingFang SC',sans-serif;background:#e8f4f8;min-height:100vh;padding:15px}
+.container{background:#fff;border-radius:16px;padding:24px;max-width:560px;margin:0 auto;box-shadow:0 2px 12px rgba(0,0,0,0.08)}
+h1{text-align:center;color:#2c3e50;font-size:24px;margin-bottom:4px}
+.subtitle{text-align:center;color:#95a5a6;font-size:13px;margin-bottom:18px}
+
+.setup-box{background:#f0f7fa;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #d4e6f1}
+.setup-box label{display:block;color:#2c3e50;font-size:14px;font-weight:bold;margin-bottom:8px}
 .setup-row{display:flex;gap:10px;flex-wrap:wrap}
-.setup-row input,.setup-row select{padding:12px;border:2px solid #d4e6f1;border-radius:10px;font-size:16px;flex:1;min-width:100px}
-.setup-btn{padding:12px 20px;background:#5b9bd5;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;flex:1}
-.query-buttons{display:flex;gap:8px;margin:15px 0;flex-wrap:wrap}
-.query-btn{padding:12px;border:none;border-radius:10px;font-size:15px;font-weight:bold;color:#fff;flex:1;min-width:70px;cursor:pointer}
+.setup-row input[type="date"]{flex:1;padding:10px 12px;border:2px solid #d4e6f1;border-radius:8px;font-size:15px;min-width:140px;background:#fff}
+.setup-row select{flex:1;padding:10px 12px;border:2px solid #d4e6f1;border-radius:8px;font-size:15px;background:#fff;min-width:100px;cursor:pointer}
+.setup-btn{padding:10px 22px;background:#5b9bd5;color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;flex:1;min-width:80px;transition:all 0.2s}
+.setup-btn:active{transform:scale(0.96)}
+.setup-status{margin-top:10px;padding:8px 14px;background:#d5e8f0;border-radius:6px;font-size:13px;color:#2c3e50;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px}
+.setup-status .label{font-weight:bold}
+.setup-status .value{color:#1a5276;font-weight:bold}
+
+.query-buttons{display:flex;gap:8px;margin:14px 0;flex-wrap:wrap}
+.query-btn{padding:11px 16px;border:none;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer;color:#fff;flex:1;min-width:70px;transition:all 0.2s}
+.query-btn:active{transform:scale(0.96)}
 .btn-week{background:#5b9bd5}
 .btn-month{background:#4aa3c2}
 .btn-custom{background:#7fb3d0}
-.custom-query{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.custom-query input{flex:1;padding:12px;border:2px solid #d4e6f1;border-radius:10px;font-size:16px}
-.custom-query button{padding:12px 20px;background:#5b9bd5;color:#fff;border:none;border-radius:10px;font-size:16px;cursor:pointer}
-.result-box{display:none;margin-top:15px;padding:15px;background:#f7fbfd;border-radius:12px;border:1px solid #d4e6f1}
-.result-box.show{display:block}
-.result-item{display:flex;justify-content:space-between;padding:10px;margin:5px 0;background:#fff;border-radius:8px;border-left:3px solid #5b9bd5}
+
+.custom-query{margin-top:12px;padding:16px;background:#f8f9fa;border-radius:10px;border:1px solid #e0e0e0;display:none}
+.custom-query .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.custom-query .row label{font-size:14px;color:#555;font-weight:bold;min-width:55px}
+.custom-query input[type="date"]{flex:1;padding:9px 12px;border:2px solid #d4e6f1;border-radius:8px;font-size:15px;min-width:140px}
+.custom-query input[type="number"]{width:72px;padding:9px 8px;border:2px solid #d4e6f1;border-radius:8px;font-size:15px;text-align:center}
+.custom-query .btn-group{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.custom-query .btn-group button{padding:10px 18px;border:none;border-radius:8px;font-size:14px;font-weight:bold;cursor:pointer;color:#fff;flex:1;min-width:80px;transition:all 0.2s}
+.custom-query .btn-group button:active{transform:scale(0.96)}
+.btn-single{background:#5b9bd5}
+.btn-range-go{background:#6c5ce7}
+
+.result-box{margin-top:16px;padding:16px;border-radius:12px;background:#f7fbfd;border:1px solid #d4e6f1;display:none;max-height:520px;overflow-y:auto}
+.result-box.show{display:block;animation:slideIn 0.3s ease}
+.result-header{font-size:17px;font-weight:bold;color:#2c3e50;margin-bottom:12px;border-bottom:2px solid #d4e6f1;padding-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.result-header .count{font-size:13px;color:#7f8c8d;font-weight:normal}
+.result-item{display:flex;justify-content:space-between;padding:9px 14px;margin:4px 0;background:#fff;border-radius:6px;border-left:3px solid #5b9bd5;font-size:15px;align-items:center}
+.result-item .date{color:#2c3e50;font-weight:500;min-width:140px}
+.result-item .shift{color:#34495e;text-align:right;min-width:120px}
+.result-item .shift .time{color:#7f8c8d;font-size:12px}
 .result-item.today{background:#eaf4fa;border-left-color:#f39c12;font-weight:bold}
-.cycle-info{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:15px;padding:12px;background:#f0f7fa;border-radius:12px;text-align:center}
-.cycle-item{background:#fff;padding:8px;border-radius:8px;border:1px solid #d4e6f1}
-.cycle-item .name{font-size:15px;font-weight:bold}
-.cycle-item .time{font-size:11px;color:#7f8c8d}
-.status{padding:8px 12px;background:#d5e8f0;border-radius:8px;font-size:13px;margin-top:10px;display:flex;justify-content:space-between}
-@media(max-width:400px){.setup-row{flex-direction:column}.query-buttons{flex-direction:column}.custom-query{flex-direction:column}.cycle-info{grid-template-columns:1fr}}
+.result-item .weekday{color:#7f8c8d;font-size:12px;margin:0 6px}
+
+.cycle-info{margin-top:16px;padding:14px;background:#f0f7fa;border-radius:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.cycle-item{padding:10px 6px;background:#fff;border-radius:8px;border:1px solid #d4e6f1}
+.cycle-item .day{font-size:11px;color:#7f8c8d}
+.cycle-item .name{font-size:15px;font-weight:bold;color:#2c3e50;margin:3px 0}
+.cycle-item .time{font-size:12px;color:#7f8c8d}
+
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:400px){.container{padding:16px}.setup-row{flex-direction:column;align-items:stretch}.query-buttons{flex-direction:column}.custom-query .row{flex-direction:column;align-items:stretch}.custom-query .btn-group{flex-direction:column}.cycle-info{grid-template-columns:1fr}.result-item{flex-direction:column;align-items:flex-start;gap:4px}.result-item .shift{text-align:left;min-width:auto}}
 </style>
 </head>
 <body>
 <div class="container">
 <h1>📅 班次查询</h1>
+<p class="subtitle">设置起始日期 · 快速查询排班</p >
+
 <div class="setup-box">
 <label>📌 设置起始日期和班次</label>
 <div class="setup-row">
@@ -46,39 +77,186 @@ h1{text-align:center;font-size:22px;color:#2c3e50;margin-bottom:15px}
 <option value="1">🌙 晚班</option>
 <option value="2" selected>☀️ 正常班</option>
 </select>
-<button class="setup-btn" onclick="setStart()">确认</button>
+<button class="setup-btn" onclick="setStartDate()">确认设置</button>
 </div>
-<div class="status"><span>📅 <span id="d1">-</span></span><span>📌 <span id="d2">-</span></span></div>
+<div class="setup-status">
+<span><span class="label">📅 起始日期：</span><span class="value" id="displayDate">-</span></span>
+<span><span class="label">📌 起始班次：</span><span class="value" id="displayShift">-</span></span>
 </div>
+</div>
+
 <div class="query-buttons">
-<button class="query-btn btn-week" onclick="qWeek()">📊 本周</button>
-<button class="query-btn btn-month" onclick="qMonth()">📆 本月</button>
-<button class="query-btn btn-custom" onclick="toggleC()">🔍 指定日</button>
+<button class="query-btn btn-week" onclick="queryWeek()">📊 本周</button>
+<button class="query-btn btn-month" onclick="queryMonth()">📆 30天</button>
+<button class="query-btn btn-custom" onclick="toggleCustom()">🔍 指定日期</button>
 </div>
-<div class="custom-query" id="cq" style="display:none">
-<input type="date" id="td"><button onclick="qCustom()">查询</button>
+
+<div class="custom-query" id="customQuery">
+<div class="row">
+<label>📅 日期：</label>
+<input type="date" id="targetDate">
 </div>
-<div class="result-box" id="rb"><div id="rh"></div><div id="rc"></div></div>
+<div class="row">
+<label>📏 天数：</label>
+<input type="number" id="rangeDays" value="7" min="1" max="90">
+<span style="font-size:13px;color:#999">连续几天（1-90天）</span>
+</div>
+<div class="btn-group">
+<button class="btn-single" onclick="querySingle()">📌 查询单天</button>
+<button class="btn-range-go" onclick="queryRange()">📊 连续查询</button>
+</div>
+</div>
+
+<div class="result-box" id="resultBox">
+<div class="result-header" id="resultHeader">排班表 <span class="count" id="resultCount"></span></div>
+<div id="resultContent"></div>
+</div>
+
 <div class="cycle-info">
-<div class="cycle-item"><div class="name">🌅 早班</div><div class="time">04:30-13:00</div></div>
-<div class="cycle-item"><div class="name">🌙 晚班</div><div class="time">13:00-22:00</div></div>
-<div class="cycle-item"><div class="name">☀️ 正常班</div><div class="time">08:00-18:00</div></div>
+<div class="cycle-item"><div class="day">第1天</div><div class="name">🌅 早班</div><div class="time">04:30-13:00</div></div>
+<div class="cycle-item"><div class="day">第2天</div><div class="name">🌙 晚班</div><div class="time">13:00-22:00</div></div>
+<div class="cycle-item"><div class="day">第3天</div><div class="name">☀️ 正常班</div><div class="time">08:30-18:00</div></div>
 </div>
 </div>
+
 <script>
-const S=[{n:'早班',t:'04:30-13:00',e:'🌅'},{n:'晚班',t:'13:00-22:00',e:'🌙'},{n:'正常班',t:'08:00-18:00',e:'☀️'}];
-let sd='',si=2;
-function up(){document.getElementById('d1').textContent=sd||'-';document.getElementById('d2').textContent=sd?S[si].n:'-';}
-function setStart(){sd=document.getElementById('startDate').value;si=parseInt(document.getElementById('startShift').value);if(!sd){alert('请选择日期');return}up();qWeek()}
-function gs(td){if(!sd)return null;let d=Math.floor((new Date(td)-new Date(sd))/(86400000));let i=(si+d)%3;if(i<0)i+=3;return{s:S[i],d:i+1,day:d}}
-function wd(ds){return'周'+['日','一','二','三','四','五','六'][new Date(ds).getDay()]}
-function fmt(ds){let p=ds.split('-');return p[0]+'年'+parseInt(p[1])+'月'+parseInt(p[2])+'日'}
-function show(ds,t){let b=document.getElementById('rb'),h=document.getElementById('rh'),c=document.getElementById('rc');b.className='result-box show';h.textContent=t;let html='',today=new Date().toISOString().split('T')[0];ds.forEach(d=>{let r=gs(d);if(!r)return;let is=d===today;html+=`<div class="${is?'result-item today':'result-item'}"><span>${fmt(d)} ${wd(d)}${is?' ⭐':''}</span><span>${r.s.e} ${r.s.n} ${r.s.t}</span></div>`});c.innerHTML=html}
-function qWeek(){if(!sd){alert('请先设置起始日期');return}let d=[];for(let i=0;i<7;i++){let t=new Date();t.setDate(t.getDate()+i);d.push(t.toISOString().split('T')[0])}show(d,'📊 本周排班')}
-function qMonth(){if(!sd){alert('请先设置起始日期');return}let t=new Date(),y=t.getFullYear(),m=t.getMonth(),days=new Date(y,m+1,0).getDate(),d=[];for(let i=1;i<=days;i++){let dt=new Date(y,m,i);d.push(dt.toISOString().split('T')[0])}show(d,'📆 '+y+'年'+(m+1)+'月')}
-function toggleC(){let d=document.getElementById('cq');d.style.display=d.style.display==='none'?'flex':'none';if(d.style.display==='flex')document.getElementById('td').value=new Date().toISOString().split('T')[0]}
-function qCustom(){if(!sd){alert('请先设置起始日期');return}let td=document.getElementById('td').value;if(!td){alert('请选择日期');return}let r=gs(td);if(!r)return;let b=document.getElementById('rb');b.className='result-box show';document.getElementById('rh').textContent='🔍 查询结果';document.getElementById('rc').innerHTML=`<div class="result-item today"><span>${fmt(td)} ${wd(td)}${td===new Date().toISOString().split('T')[0]?' ⭐今天':''}</span><span style="font-size:18px">${r.s.e} ${r.s.n} ${r.s.t}</span></div><div style="margin-top:10px;padding:10px;background:#f0f7fa;border-radius:8px;font-size:13px">📌 从起始日算起第 ${r.day+1} 天</div>`}
-window.onload=function(){let t=new Date().toISOString().split('T')[0];document.getElementById('startDate').value=t;sd=t;si=2;up();qWeek()}
+const SHIFTS=[
+  {name:'早班',time:'04:30-13:00',emoji:'🌅'},
+  {name:'晚班',time:'13:00-22:00',emoji:'🌙'},
+  {name:'正常班',time:'08:30-18:00',emoji:'☀️'}
+];
+let startDate='',startShiftIndex=2;
+
+function updateStatus(){
+  document.getElementById('displayDate').textContent=startDate||'-';
+  document.getElementById('displayShift').textContent=startDate?SHIFTS[startShiftIndex].name:'-';
+}
+
+function setStartDate(){
+  startDate=document.getElementById('startDate').value;
+  startShiftIndex=parseInt(document.getElementById('startShift').value);
+  if(!startDate){alert('请选择日期！');return}
+  updateStatus();
+  queryWeek();
+}
+
+function getShift(targetDate){
+  if(!startDate)return null;
+  const start=new Date(startDate),target=new Date(targetDate);
+  const diffDays=Math.floor((target-start)/(1000*60*60*24));
+  let shiftIndex=(startShiftIndex+diffDays)%3;
+  if(shiftIndex<0)shiftIndex+=3;
+  return{shift:SHIFTS[shiftIndex],dayIndex:shiftIndex+1,diffDays:diffDays};
+}
+
+function getWeekday(dateStr){
+  return'周'+['日','一','二','三','四','五','六'][new Date(dateStr).getDay()];
+}
+
+function formatDate(dateStr){
+  const p=dateStr.split('-');
+  return p[0]+'年'+parseInt(p[1])+'月'+parseInt(p[2])+'日';
+}
+
+function formatDateShort(dateStr){
+  const p=dateStr.split('-');
+  return parseInt(p[1])+'/'+parseInt(p[2]);
+}
+
+function displayResults(dates,title){
+  const box=document.getElementById('resultBox');
+  const header=document.getElementById('resultHeader');
+  const content=document.getElementById('resultContent');
+  const count=document.getElementById('resultCount');
+  box.className='result-box show';
+  header.innerHTML=title+' <span class="count">共'+dates.length+'天</span>';
+  let html='';
+  const today=new Date().toISOString().split('T')[0];
+  dates.forEach(dateStr=>{
+    const result=getShift(dateStr);
+    if(!result)return;
+    const isToday=dateStr===today;
+    const itemClass=isToday?'result-item today':'result-item';
+    const todayTag=isToday?' ⭐':'';
+    html+=`<div class="${itemClass}">
+      <span class="date">${formatDate(dateStr)} <span class="weekday">${getWeekday(dateStr)}</span>${todayTag}</span>
+      <span class="shift">${result.shift.emoji} ${result.shift.name}  <span class="time">${result.shift.time}</span></span>
+    </div>`;
+  });
+  content.innerHTML=html;
+}
+
+function queryWeek(){
+  if(!startDate){alert('请先设置起始日期！');return}
+  const today=new Date(),dates=[];
+  for(let i=0;i<7;i++){const d=new Date(today);d.setDate(d.getDate()+i);dates.push(d.toISOString().split('T')[0]);}
+  displayResults(dates,'📊 本周排班');
+}
+
+function queryMonth(){
+  if(!startDate){alert('请先设置起始日期！');return}
+  const today=new Date(),dates=[];
+  for(let i=0;i<30;i++){const d=new Date(today);d.setDate(d.getDate()+i);dates.push(d.toISOString().split('T')[0]);}
+  displayResults(dates,'📆 未来30天排班');
+}
+
+function toggleCustom(){
+  const div=document.getElementById('customQuery');
+  if(div.style.display==='none'){
+    div.style.display='block';
+    document.getElementById('targetDate').value=new Date().toISOString().split('T')[0];
+  }else{
+    div.style.display='none';
+  }
+}
+
+function querySingle(){
+  if(!startDate){alert('请先设置起始日期！');return}
+  const targetDate=document.getElementById('targetDate').value;
+  if(!targetDate){alert('请选择日期！');return}
+  const result=getShift(targetDate);
+  if(!result)return;
+  const isToday=targetDate===new Date().toISOString().split('T')[0];
+  const todayTag=isToday?' ⭐ 今天':'';
+  const box=document.getElementById('resultBox');
+  const header=document.getElementById('resultHeader');
+  const content=document.getElementById('resultContent');
+  const count=document.getElementById('resultCount');
+  box.className='result-box show';
+  header.innerHTML='🔍 查询结果 <span class="count">共1天</span>';
+  content.innerHTML=`
+    <div class="result-item today" style="border-left-color:#f39c12;">
+      <span class="date">${formatDate(targetDate)} <span class="weekday">${getWeekday(targetDate)}</span>${todayTag}</span>
+      <span class="shift" style="font-size:18px;">${result.shift.emoji} ${result.shift.name}  <span class="time" style="font-size:14px;">${result.shift.time}</span></span>
+    </div>
+    <div style="margin-top:10px;padding:10px 14px;background:#f0f7fa;border-radius:6px;font-size:13px;color:#555;">
+      📌 从起始日期算起第 ${result.diffDays + 1} 天（循环第 ${result.dayIndex} 天）
+    </div>
+  `;
+}
+
+function queryRange(){
+  if(!startDate){alert('请先设置起始日期！');return}
+  const targetDate=document.getElementById('targetDate').value;
+  if(!targetDate){alert('请选择日期！');return}
+  let days=parseInt(document.getElementById('rangeDays').value);
+  if(days<1)days=1;
+  if(days>90)days=90;
+  const dates=[];
+  for(let i=0;i<days;i++){const d=new Date(targetDate);d.setDate(d.getDate()+i);dates.push(d.toISOString().split('T')[0]);}
+  displayResults(dates,'📊 连续'+days+'天排班（从'+formatDateShort(targetDate)+'开始）');
+}
+
+window.onload=function(){
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('startDate').value=today;
+  startDate=today;
+  startShiftIndex=2;
+  updateStatus();
+  queryWeek();
+  document.getElementById('targetDate').value=today;
+  document.getElementById('rangeDays').value=7;
+}
 </script>
 </body>
 </html>
